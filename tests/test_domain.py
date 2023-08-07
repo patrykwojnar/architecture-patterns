@@ -1,22 +1,23 @@
 from domain.model import RestockBatch, OrderLine
+from datetime import date
 
 
-def make_batch_and_line(sku, batch_qty, line_qty):
+def make_batch_and_line(sku: str, batch_qty: int, line_qty: int):
     return (
-        RestockBatch("test-001", sku, batch_qty),
+        RestockBatch("test-001", sku, batch_qty, eta=date.today()),
         OrderLine("order-123", sku, line_qty),
     )
 
 
 def test_allocating_reduces_available_quantity():
-    batch = RestockBatch("test-001", "book", qty=20)
+    batch = RestockBatch("test-001", "book", qty=20, eta=date.today())
     line = OrderLine("order-123", "book", qty=2)
     batch.allocate(line)
     assert batch.available_quantity == 18
 
 
-def test_cannot_allocate_if_sku_o_not_match():
-    batch = RestockBatch("test-001", "book", 20)
+def test_cannot_allocate_if_sku_do_not_match():
+    batch = RestockBatch("test-001", "book", 20, eta=date.today())
     diffrent_sku_line = OrderLine("order-123", "notebook", 20)
     assert batch.can_allocate(diffrent_sku_line) is False
 
