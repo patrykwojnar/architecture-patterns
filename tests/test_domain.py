@@ -35,3 +35,9 @@ def test_can_allocate_if_available_smaller_than_required():
 def test_can_allocate_if_available_equal_than_required():
     equal_batch, equal_line = make_batch_and_line("book", 20, 20)
     assert equal_batch.can_allocate(equal_line)
+
+
+def test_can_only_deallocate_allocated_lines():
+    batch, unallocated_line = make_batch_and_line("book", 20, 2)
+    batch.deallocate(unallocated_line)
+    assert batch.available_quantity == 20
