@@ -10,6 +10,7 @@ and lower storage costs.
 """
 
 
+# Value Object
 @dataclass(frozen=True)
 class OrderLine:
     orderID: str
@@ -24,6 +25,14 @@ class RestockBatch:
         self.eta = eta  # estimated time of arrival
         self._purchased_quantity = qty
         self._allcoations = set()
+
+    def __eq__(self, other):
+        if not isinstance(other, RestockBatch):
+            return False
+        return self.reference_code == other.reference_code
+
+    def __hash__(self):
+        return hash(self.reference_code)
 
     def allocate(self, line: OrderLine):
         if self.can_allocate(line):

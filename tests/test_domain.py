@@ -41,3 +41,10 @@ def test_can_only_deallocate_allocated_lines():
     batch, unallocated_line = make_batch_and_line("book", 20, 2)
     batch.deallocate(unallocated_line)
     assert batch.available_quantity == 20
+
+
+def test_allocation_without_repetition():
+    batch, line = make_batch_and_line("book", 20, 2)
+    batch.allocate(line)
+    batch.allocate(line)
+    assert batch.available_quantity == 18
